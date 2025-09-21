@@ -1,63 +1,51 @@
-import React, { useMemo } from 'react'
-import { GoogleMap, Marker, Polyline, useLoadScript } from '@react-google-maps/api'
+import React, { useEffect } from 'react'
+import { MapContainer, TileLayer, Polyline, CircleMarker, Tooltip, useMap } from 'react-leaflet'
 
 const containerClass = 'map-container'
 
+function MapController({ center }) {
+  const map = useMap()
+  useEffect(() => {
+    if (center) map.setView(center)
+  }, [center, map])
+  return null
+}
+
 export default function MapView({ center, routes, stops, vehicles, selectedRoute, onSelectRoute }) {
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-    libraries: ['places']
-  })
-
-  const mapOptions = useMemo(() => ({
-    clickableIcons: false,
-    disableDefaultUI: true,
-    zoomControl: true,
-  }), [])
-
-  if (!isLoaded) return <div className="w-full h-full flex items-center justify-center text-gray-500">Loading map…</div>
-
   return (
-    <GoogleMap
-      center={center}
-      zoom={13}
-      options={mapOptions}
-      mapContainerClassName={containerClass}
-    >
+    <MapContainer center={center} zoom={13} className={containerClass} preferCanvas={true}>
+      <MapController center={center} />
+      <TileLayer
+        attribution='&copy; OpenStreetMap contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+
       {selectedRoute && (
-        <Polyline
-          path={selectedRoute.path}
-          options={{ strokeColor: selectedRoute.color, strokeOpacity: 0.9, strokeWeight: 4 }}
-        />
+        <Polyline positions={selectedRoute.path} pathOptions={{ color: selectedRoute.color, weight: 4, opacity: 0.9 }} />
       )}
 
       {stops.filter(s => !selectedRoute || s.routeId === selectedRoute.id).map(stop => (
-        <Marker key={stop.id} position={stop.position} label={{ text: 'S', color: '#ffffff' }}
-          icon={{
-            path: google.maps.SymbolPath.CIRCLE,
-            scale: 6,
-            fillColor: '#2563eb',
-            fillOpacity: 1,
-            strokeColor: '#ffffff',
-            strokeWeight: 2,
-          }}
-          onClick={() => onSelectRoute?.(stop.routeId)}
-        />
+        <CircleMarker
+          key={stop.id}
+          center={stop.position}
+          radius={6}
+          pathOptions={{ color: '#ffffff', weight: 2, fillColor: '#2563eb', fillOpacity: 1 }}
+          eventHandlers={{ click: () => onSelectRoute?.(stop.routeId) }}
+        >
+          <Tooltip direction="top" offset={[0, -8]} opacity={1} permanent={false}>{stop.name}</Tooltip>
+        </CircleMarker>
       ))}
 
       {vehicles.filter(v => !selectedRoute || v.routeId === selectedRoute.id).map(v => (
-        <Marker key={v.id} position={v.position} label={{ text: v.shortId, color: '#ffffff' }}
-          icon={{
-            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-            scale: 4,
-            fillColor: '#16a34a',
-            fillOpacity: 1,
-            strokeColor: '#065f46',
-            strokeWeight: 1,
-            rotation: v.bearing || 0,
-          }}
-        />
+        <CircleMarker
+          key={v.id}
+          center={v.position}
+          radius={8}
+          pathOptions={{ color: '#065f46', weight: 1, fillColor: '#16a34a', fillOpacity: 1 }}
+        >
+          <Tooltip direction="right" offset={[8, 0]} opacity={1} permanent={false}>{v.shortId}</Tooltip>
+        </CircleMarker>
       ))}
-    </GoogleMap>
+    </MapContainer>
   )
 }
