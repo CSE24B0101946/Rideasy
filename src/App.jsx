@@ -58,7 +58,22 @@ export default function App() {
 
   return (
     <div className="app-shell">
-      <nav className="site-navbar"><div className="brand-title">Rideasy</div></nav>
+      <nav className="site-navbar"><div className="brand-title"><span className="brand-lane" aria-hidden="true">
+        <svg className="vehicle vehicle-car" viewBox="0 0 64 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <rect x="10" y="12" width="30" height="10" rx="2" fill="currentColor" />
+          <rect x="22" y="8" width="12" height="6" rx="1" fill="currentColor" />
+          <circle cx="18" cy="24" r="4" fill="#111827" />
+          <circle cx="34" cy="24" r="4" fill="#111827" />
+        </svg>
+        <svg className="vehicle vehicle-bus" viewBox="0 0 64 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <rect x="6" y="8" width="40" height="14" rx="2" fill="currentColor" />
+          <rect x="10" y="10" width="8" height="6" fill="#065f46" />
+          <rect x="20" y="10" width="8" height="6" fill="#065f46" />
+          <rect x="30" y="10" width="8" height="6" fill="#065f46" />
+          <circle cx="16" cy="24" r="4" fill="#111827" />
+          <circle cx="32" cy="24" r="4" fill="#111827" />
+        </svg>
+      </span><span>Rideasy</span></div></nav>
       <header className="header-bar">
         <div className="flex-1">
           <Planner onPlan={(from, to) => {
