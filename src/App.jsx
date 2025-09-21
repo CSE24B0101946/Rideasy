@@ -72,7 +72,7 @@ export default function App() {
         <div className="w-[220px] hidden md:block">
           <RouteSelector routes={routes} value={selectedRouteId} onChange={setSelectedRouteId} />
         </div>
-        <UserLocation onCenter={setCenter} />
+        <div className="flex items-center gap-2"><UserLocation onCenter={setCenter} /><span className="badge bg-blue-100 text-blue-700">Uttar Pradesh</span></div>
       </header>
       <div className="content-area">
         <div className="relative">
