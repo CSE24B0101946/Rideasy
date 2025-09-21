@@ -58,7 +58,7 @@ export default function App() {
 
   return (
     <div className="app-shell">
-      <nav className="site-navbar"><div className="brand-title">Readeasy</div></nav>
+      <nav className="site-navbar"><div className="brand-title">Rideasy</div></nav>
       <header className="header-bar">
         <div className="flex-1">
           <Planner onPlan={(from, to) => {
