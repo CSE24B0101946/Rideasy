@@ -1,6 +1,6 @@
 import EventEmitter from 'eventemitter3'
 
-export const baseCenter = { lat: 28.6139, lng: 77.2090 }
+export const baseCenter = { lat: 26.8467, lng: 80.9462 }
 
 function offset(p, dLat, dLng) { return { lat: p.lat + dLat, lng: p.lng + dLng } }
 
@@ -24,7 +24,7 @@ const routeBPath = [
 ]
 
 function makeStops(routeId, routeName, path) {
-  const names = ['Central', 'Market', 'Park', 'Hospital', 'Station']
+  const names = ['Hazratganj', 'Charbagh', 'Alambagh', 'Amausi', 'Gomti Nagar']
   return names.map((n, i) => ({
     id: `${routeId}-S${i+1}`,
     name: `${n}`,
@@ -36,12 +36,12 @@ function makeStops(routeId, routeName, path) {
 
 export function getInitialData() {
   const routes = [
-    { id: 'R1', name: 'Blue Line', description: 'Northwest to Southeast corridor', color: '#2563eb', path: routeAPath },
-    { id: 'R2', name: 'Green Line', description: 'Southwest to Northeast corridor', color: '#16a34a', path: routeBPath },
+    { id: 'R1', name: 'Lucknow Line A', description: 'Hazratganj 1 Amausi corridor', color: '#2563eb', path: routeAPath, state: 'UP' },
+    { id: 'R2', name: 'Lucknow Line B', description: 'Charbagh 1 Gomti Nagar corridor', color: '#16a34a', path: routeBPath, state: 'UP' },
   ]
   const stops = [
-    ...makeStops('R1', 'Blue Line', routeAPath),
-    ...makeStops('R2', 'Green Line', routeBPath),
+    ...makeStops('R1', 'Lucknow Line A', routeAPath),
+    ...makeStops('R2', 'Lucknow Line B', routeBPath),
   ]
   const vehicles = [
     { id: 'BUS-101', shortId: '101', routeId: 'R1', position: routeAPath[1], bearing: 45, progress: 1 },
