@@ -120,21 +120,18 @@ export default function App() {
               <div className="mt-2 text-sm text-gray-600">Enter From and TO, then tap Find public transport</div>
             )}
           </div>
-          <div>
-            <h3 className="section-title">Route details</h3>
-            {selectedRoute ? (
-              <div className="mt-2 space-y-1 text-sm">
-                <div className="font-medium">{selectedRoute.name}</div>
-                <div className="text-gray-600">{selectedRoute.description}</div>
-                <div className="text-gray-600">Stops: {stops.filter(s => s.routeId === selectedRoute.id).length}</div>
+          {selectedRoute && (
+            <div>
+              <h3 className="section-title">Live route tracker</h3>
+              <div className="mt-2">
+                {/* Horizontal progress like "Where is my train" */}
+                <RouteProgress route={selectedRoute} stops={stops.filter(s => s.routeId === selectedRoute.id)} vehicles={vehicles} />
               </div>
-            ) : (
-              <div className="mt-2 text-sm text-gray-600">Select a route to view details</div>
-            )}
-          </div>
+            </div>
+          )}
           <div>
-            <h3 className="section-title">Vehicles</h3>
-            <VehicleStatus vehicles={vehicles} routes={routes} stops={stops} />
+            <h3 className="section-title">{selectedRoute ? 'Next buses on this route' : 'Vehicles'}</h3>
+            <VehicleStatus vehicles={vehicles} routes={routes} stops={stops} selectedRouteId={selectedRoute?.id ?? null} nextOnly={!!selectedRoute} />
           </div>
         </aside>
       </div>
