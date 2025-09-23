@@ -31,7 +31,8 @@ export default function VehicleStatus({ vehicles, routes, stops }) {
   const enriched = useMemo(() => vehicles.map(v => {
     const r = routes.find(x => x.id === v.routeId)
     const eta = etaMinutes(v, stops)
-    return { ...v, routeName: r?.name || '—', eta }
+    const operator = v.operator || 'Uttar pradesh parivhen'
+    return { ...v, routeName: r?.name || '—', eta, operator }
   }), [vehicles, routes, stops])
 
   return (
@@ -41,6 +42,7 @@ export default function VehicleStatus({ vehicles, routes, stops }) {
           <div>
             <div className="text-sm font-medium">{v.id}</div>
             <div className="text-xs text-gray-600">{v.routeName}</div>
+            <div className="text-[10px] text-gray-500">{v.operator}</div>
           </div>
           <div className="text-right">
             {v.eta ? (
