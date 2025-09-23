@@ -86,7 +86,7 @@ export function getInitialData() {
     ...makeNamedStops('R8', 'Ghaziabad – Bulandshahr', ['Ghaziabad', 'Dadri', 'Sikandrabad', 'Bulandshahr'], path_GZB_BSR),
   ]
 
-  const OP = 'Uttar pradesh parivhen'
+  const OP = 'UPSRTC'
   const vehicles = [
     { id: 'BUS-101', shortId: '101', routeId: 'R1', position: routeAPath[1], bearing: 45, progress: 1, operator: OP },
     { id: 'BUS-102', shortId: '102', routeId: 'R1', position: routeAPath[3], bearing: 90, progress: 3, operator: OP },

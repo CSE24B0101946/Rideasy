@@ -27,17 +27,26 @@ function etaMinutes(vehicle, stops, speedMps = 8.33) { // ~30 km/h
   return { stop: next, minutes }
 }
 
-export default function VehicleStatus({ vehicles, routes, stops }) {
+export default function VehicleStatus({ vehicles, routes, stops, selectedRouteId = null, nextOnly = false }) {
   const enriched = useMemo(() => vehicles.map(v => {
     const r = routes.find(x => x.id === v.routeId)
     const eta = etaMinutes(v, stops)
-    const operator = v.operator || 'Uttar pradesh parivhen'
+    const operator = v.operator || 'UPSRTC'
     return { ...v, routeName: r?.name || '—', eta, operator }
   }), [vehicles, routes, stops])
 
+  const filtered = useMemo(() => {
+    let list = enriched
+    if (selectedRouteId) list = list.filter(v => v.routeId === selectedRouteId)
+    list = list.map(v => ({ ...v, sortEta: v.eta?.minutes ?? Number.MAX_SAFE_INTEGER }))
+    list.sort((a, b) => a.sortEta - b.sortEta)
+    if (nextOnly) list = list.slice(0, 5)
+    return list
+  }, [enriched, selectedRouteId, nextOnly])
+
   return (
     <ul className="divide-y divide-gray-100">
-      {enriched.map(v => (
+      {filtered.map(v => (
         <li key={v.id} className="py-2 flex items-center justify-between">
           <div>
             <div className="text-sm font-medium">{v.id}</div>

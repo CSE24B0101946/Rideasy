@@ -23,3 +23,13 @@
 .vehicle { height: 16px; width: 24px; color: #ffffff; position: absolute; left: -30px; animation: drive 3.5s linear infinite; }
 .vehicle-bus { animation-duration: 4.2s; animation-delay: 0.6s; }
 @keyframes drive { 0% { transform: translateX(0); } 100% { transform: translateX(115px); } }
+
+/* Route progress */
+.progress-route { @apply relative w-full; height: 72px; }
+.progress-line { @apply absolute left-0 right-0 bg-gray-300; top: 28px; height: 4px; border-radius: 2px; }
+.progress-stops { @apply absolute left-0 right-0; top: 0; height: 64px; }
+.progress-stop { @apply absolute -translate-x-1/2 text-center; top: 0; }
+.progress-dot { @apply w-3 h-3 bg-blue-600 rounded-full border-2 border-white shadow; position: absolute; top: 24px; left: 50%; transform: translateX(-50%); }
+.progress-label { @apply text-[10px] text-gray-700 mt-1; position: absolute; top: 40px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+.progress-vehicles { @apply absolute left-0 right-0; top: 16px; height: 20px; }
+.progress-vehicle { @apply w-4 h-4 rounded-full bg-green-600 border-2 border-white shadow; position: absolute; top: 0; transform: translateX(-50%); }
