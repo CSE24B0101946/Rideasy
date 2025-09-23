@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 
-export default function RouteProgress({ route, stops, vehicles }) {
+export default function RouteProgress({ route, stops, vehicles, selectedVehicleId = null }) {
   const orderedStops = useMemo(() => {
     if (!route || !route.path?.length) return []
     // order stops by proximity to path index
@@ -29,8 +29,9 @@ export default function RouteProgress({ route, stops, vehicles }) {
         {vehiclesOnRoute.map(v => {
           const idx = Math.max(0, Math.min(v.progress ?? 0, maxIdx))
           const pct = maxIdx === 0 ? 0 : (idx / maxIdx) * 100
+          const cls = v.id === selectedVehicleId ? 'progress-vehicle ring-2 ring-green-400 scale-110' : 'progress-vehicle'
           return (
-            <div key={v.id} className="progress-vehicle" style={{ left: pct + '%' }} title={`${v.id} · ${v.routeId}`} />
+            <div key={v.id} className={cls} style={{ left: pct + '%' }} title={`${v.id} · ${v.routeId}`} />
           )
         })}
       </div>

@@ -4,6 +4,7 @@ import Planner from './components/Planner.jsx'
 import RouteSelector from './components/RouteSelector.jsx'
 import VehicleStatus from './components/VehicleStatus.jsx'
 import RouteProgress from './components/RouteProgress.jsx'
+import BusTracker from './components/BusTracker.jsx'
 import UserLocation from './components/UserLocation.jsx'
 import { getSocket } from './services/socket.js'
 import { baseCenter, getInitialData } from './data/mockData.js'
@@ -15,6 +16,7 @@ export default function App() {
   const [selectedRouteId, setSelectedRouteId] = useState(null)
   const [center, setCenter] = useState(baseCenter)
   const [plans, setPlans] = useState([])
+  const [selectedVehicleId, setSelectedVehicleId] = useState(null)
 
   useEffect(() => {
     const initial = getInitialData()
@@ -99,7 +101,16 @@ export default function App() {
             stops={stops}
             vehicles={vehicles}
             selectedRoute={selectedRoute}
+            selectedVehicleId={selectedVehicleId}
             onSelectRoute={(id) => setSelectedRouteId(id)}
+            onSelectVehicle={(id) => {
+              setSelectedVehicleId(id)
+              const v = vehicles.find(x => x.id === id)
+              if (v) {
+                setSelectedRouteId(v.routeId)
+                setCenter(v.position)
+              }
+            }}
           />
           <div className="md:hidden absolute left-3 right-3 top-3">
             <RouteSelector routes={routes} value={selectedRouteId} onChange={setSelectedRouteId} />
@@ -125,14 +136,25 @@ export default function App() {
             <div>
               <h3 className="section-title">Live route tracker</h3>
               <div className="mt-2">
-                {/* Horizontal progress like "Where is my train" */}
-                <RouteProgress route={selectedRoute} stops={stops.filter(s => s.routeId === selectedRoute.id)} vehicles={vehicles} />
+                <RouteProgress route={selectedRoute} stops={stops.filter(s => s.routeId === selectedRoute.id)} vehicles={vehicles} selectedVehicleId={selectedVehicleId} />
+              </div>
+            </div>
+          )}
+          {selectedVehicleId && (
+            <div>
+              <h3 className="section-title">Bus tracker</h3>
+              <div className="mt-2">
+                <BusTracker vehicleId={selectedVehicleId} routes={routes} stops={stops} vehicles={vehicles} />
               </div>
             </div>
           )}
           <div>
             <h3 className="section-title">{selectedRoute ? 'Next buses on this route' : 'Vehicles'}</h3>
-            <VehicleStatus vehicles={vehicles} routes={routes} stops={stops} selectedRouteId={selectedRoute?.id ?? null} nextOnly={!!selectedRoute} />
+            <VehicleStatus vehicles={vehicles} routes={routes} stops={stops} selectedRouteId={selectedRoute?.id ?? null} nextOnly={!!selectedRoute} onSelect={(id) => {
+              setSelectedVehicleId(id)
+              const v = vehicles.find(x => x.id === id)
+              if (v) { setSelectedRouteId(v.routeId); setCenter(v.position) }
+            }} selectedVehicleId={selectedVehicleId} />
           </div>
         </aside>
       </div>

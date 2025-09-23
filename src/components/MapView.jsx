@@ -11,7 +11,7 @@ function MapController({ center }) {
   return null
 }
 
-export default function MapView({ center, routes, stops, vehicles, selectedRoute, onSelectRoute }) {
+export default function MapView({ center, routes, stops, vehicles, selectedRoute, selectedVehicleId = null, onSelectRoute, onSelectVehicle }) {
   return (
     <MapContainer center={center} zoom={13} className={containerClass} preferCanvas={true}>
       <MapController center={center} />
@@ -36,16 +36,20 @@ export default function MapView({ center, routes, stops, vehicles, selectedRoute
         </CircleMarker>
       ))}
 
-      {vehicles.filter(v => !selectedRoute || v.routeId === selectedRoute.id).map(v => (
-        <CircleMarker
-          key={v.id}
-          center={v.position}
-          radius={8}
-          pathOptions={{ color: '#065f46', weight: 1, fillColor: '#16a34a', fillOpacity: 1 }}
-        >
-          <Tooltip direction="right" offset={[8, 0]} opacity={1} permanent={false}>{v.shortId}</Tooltip>
-        </CircleMarker>
-      ))}
+      {vehicles.filter(v => !selectedRoute || v.routeId === selectedRoute.id).map(v => {
+        const selected = v.id === selectedVehicleId
+        return (
+          <CircleMarker
+            key={v.id}
+            center={v.position}
+            radius={selected ? 10 : 8}
+            pathOptions={{ color: selected ? '#1f2937' : '#065f46', weight: selected ? 2 : 1, fillColor: selected ? '#22c55e' : '#16a34a', fillOpacity: 1 }}
+            eventHandlers={{ click: () => onSelectVehicle?.(v.id) }}
+          >
+            <Tooltip direction="right" offset={[8, 0]} opacity={1} permanent={false}>{v.shortId}</Tooltip>
+          </CircleMarker>
+        )
+      })}
     </MapContainer>
   )
 }
